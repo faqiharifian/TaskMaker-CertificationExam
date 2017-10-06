@@ -115,13 +115,11 @@ public class MainActivity extends AppCompatActivity implements
         if(sortPref.equals(getString(R.string.pref_sortBy_due))){
             sort = DatabaseContract.DATE_SORT;
         }
-        Log.e("sort", sort);
         return new CursorLoader(this, DatabaseContract.CONTENT_URI, null, null, null, sort);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.e("count ", data.getCount()+"");
         mAdapter.swapCursor(data);
     }
 

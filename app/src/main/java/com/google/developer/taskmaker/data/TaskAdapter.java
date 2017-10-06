@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,7 +118,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             }else{
                 holder.dateView.setVisibility(View.GONE);
             }
-            Log.e("cursor", id+" - "+description+" - "+complete+" - "+priority+" - "+dueDate);
         }
     }
 

@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -100,7 +99,6 @@ public class TaskDetailActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("uri", getIntent().getData().toString());
         return new CursorLoader(this, getIntent().getData(), null, null, null, null);
     }
 
@@ -131,7 +129,6 @@ public class TaskDetailActivity extends AppCompatActivity implements
             }else {
                 priorityView.setImageResource(R.drawable.ic_not_priority);
             }
-            Log.e("cursor", id+" - "+description+" - "+complete+" - "+priority+" - "+dueDate);
         }
     }
 

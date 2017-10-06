@@ -127,7 +127,11 @@ public class TaskProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)){
             case TASKS_WITH_ID:
-                rows = db.update(DatabaseContract.TABLE_TASKS, values, DatabaseContract.TaskColumns._ID+" = ?", new String[]{String.valueOf(ContentUris.parseId(uri))});
+                rows = db.update(DatabaseContract.TABLE_TASKS,
+                        values,
+                        DatabaseContract.TaskColumns._ID+" = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))}
+                );
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
