@@ -63,12 +63,12 @@ public class TaskDetailActivity extends AppCompatActivity implements
             String description = DatabaseContract.getColumnString(data, DatabaseContract.TaskColumns.DESCRIPTION);
             int complete = DatabaseContract.getColumnInt(data, DatabaseContract.TaskColumns.IS_COMPLETE);
             int priority = DatabaseContract.getColumnInt(data, DatabaseContract.TaskColumns.IS_PRIORITY);
-            long dueDate = DatabaseContract.getColumnLong(data, DatabaseContract.TaskColumns.IS_COMPLETE);
+            long dueDate = DatabaseContract.getColumnLong(data, DatabaseContract.TaskColumns.DUE_DATE);
 
             nameView.setText(description);
             if(complete == 1){
                 nameView.setState(TaskTitleView.DONE);
-            }else if(dueDate != 0 && dueDate > (new Date()).getTime()){
+            }else if(dueDate != 0 && dueDate < (new Date()).getTime()){
                 nameView.setState(TaskTitleView.OVERDUE);
             }else{
                 nameView.setState(TaskTitleView.NORMAL);

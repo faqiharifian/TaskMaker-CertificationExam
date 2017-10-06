@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,12 +95,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             String description = DatabaseContract.getColumnString(mCursor, DatabaseContract.TaskColumns.DESCRIPTION);
             int complete = DatabaseContract.getColumnInt(mCursor, DatabaseContract.TaskColumns.IS_COMPLETE);
             int priority = DatabaseContract.getColumnInt(mCursor, DatabaseContract.TaskColumns.IS_PRIORITY);
-            long dueDate = DatabaseContract.getColumnLong(mCursor, DatabaseContract.TaskColumns.IS_COMPLETE);
+            long dueDate = DatabaseContract.getColumnLong(mCursor, DatabaseContract.TaskColumns.DUE_DATE);
 
             holder.nameView.setText(description);
+            Log.e("complete", String.valueOf(complete == 1));
+            Log.e("date", dueDate+" > "+(new Date()).getTime()+" = "+(dueDate > (new Date()).getTime()));
             if(complete == 1){
                 holder.nameView.setState(TaskTitleView.DONE);
-            }else if(dueDate != 0 && dueDate > (new Date()).getTime()){
+            }else if(dueDate != 0 && dueDate < (new Date()).getTime()){
                 holder.nameView.setState(TaskTitleView.OVERDUE);
             }else{
                 holder.nameView.setState(TaskTitleView.NORMAL);
@@ -118,6 +121,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             }else{
                 holder.dateView.setVisibility(View.GONE);
             }
+            Log.e("cursor", id+" - "+description+" - "+complete+" - "+priority+" - "+dueDate);
         }
     }
 

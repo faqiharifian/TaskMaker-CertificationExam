@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -107,7 +106,7 @@ public class AddTaskActivity extends AppCompatActivity implements
 
     private void saveItem() {
         //Insert a new item
-        ContentValues values = new ContentValues(4);
+        ContentValues values = new ContentValues();
         values.put(TaskColumns.DESCRIPTION, mDescriptionView.getText().toString());
         values.put(TaskColumns.IS_PRIORITY, mPrioritySelect.isChecked() ? 1 : 0);
         values.put(TaskColumns.IS_COMPLETE, 0);
