@@ -1,20 +1,27 @@
 package com.google.developer.taskmaker;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.developer.taskmaker.data.DatabaseContract;
 import com.google.developer.taskmaker.data.TaskAdapter;
 
 public class MainActivity extends AppCompatActivity implements
         TaskAdapter.OnItemClickListener,
-        View.OnClickListener {
+        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int LOADER_ID_MESSAGES = 0;
 
     private TaskAdapter mAdapter;
 
@@ -32,6 +39,15 @@ public class MainActivity extends AppCompatActivity implements
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AddTaskActivity.class));
+            }
+        });
+
+        getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
     }
 
     @Override
@@ -69,5 +85,21 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onItemToggled(boolean active, int position) {
         //TODO: Handle task item checkbox event
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, DatabaseContract.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.e("count ", data.getCount()+"");
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 }

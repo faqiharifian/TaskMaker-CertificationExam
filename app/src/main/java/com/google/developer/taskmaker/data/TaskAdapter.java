@@ -87,9 +87,29 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
     @Override
     public void onBindViewHolder(TaskHolder holder, int position) {
+        if(mCursor.moveToPosition(position)){
+            int id = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns._ID));
+            String description = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.TaskColumns.DESCRIPTION));
+            int complete = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_COMPLETE));
+            int priority = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_PRIORITY));
+            long dueDate = mCursor.getLong(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_COMPLETE));
 
-        //TODO: Bind the task data to the views
-
+            holder.nameView.setText(description);
+            holder.checkBox.setChecked(complete == 1);
+            int priorityDrawable;
+            if(priority == 1){
+                priorityDrawable = R.drawable.ic_priority;
+            }else{
+                priorityDrawable = R.drawable.ic_not_priority;
+            }
+            holder.priorityView.setImageResource(priorityDrawable);
+            if(dueDate != 0){
+                holder.dateView.setVisibility(View.VISIBLE);
+                holder.dateView.setText(DateUtils.getRelativeTimeSpanString(dueDate));
+            }else{
+                holder.dateView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

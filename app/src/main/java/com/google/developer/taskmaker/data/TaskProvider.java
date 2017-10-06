@@ -54,18 +54,63 @@ public class TaskProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
+        final SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor retCursor;
+
+        // Query for the tasks directory and write a default case
+        switch (sUriMatcher.match(uri)) {
+            // Query for the tasks directory
+            case TASKS:
+                retCursor =  db.query(DatabaseContract.TABLE_TASKS,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            // Default exception
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Set a notification URI on the Cursor and return that Cursor
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+        // Return the desired Cursor
+        return retCursor;
         //TODO: Implement task query
         //TODO: Expected "query all" Uri: content://com.google.developer.taskmaker/tasks
         //TODO: Expected "query one" Uri: content://com.google.developer.taskmaker/tasks/{id}
-        return null;
+//        return null;
     }
 
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        //TODO: Implement new task insert
-        //TODO: Expected Uri: content://com.google.developer.taskmaker/tasks
-        return null;
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        Uri returnUri;
+
+        switch (sUriMatcher.match(uri)){
+            case TASKS:
+                long id = db.insert(DatabaseContract.TABLE_TASKS, null, values);
+                if ( id > 0 ) {
+                    returnUri = ContentUris.withAppendedId(DatabaseContract.CONTENT_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            // Set the value for the returnedUri and write the default case for unknown URI's
+            // Default case throws an UnsupportedOperationException
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Notify the resolver if the uri has been changed, and return the newly inserted URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return constructed uri (this points to the newly inserted row of data)
+        return returnUri;
     }
 
     @Override
