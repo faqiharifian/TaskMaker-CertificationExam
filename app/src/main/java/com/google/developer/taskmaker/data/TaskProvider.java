@@ -70,7 +70,7 @@ public class TaskProvider extends ContentProvider {
                         sortOrder);
                 break;
             case TASKS_WITH_ID:
-                String id = uri.getPathSegments().get(1);
+                String id = String.valueOf(ContentUris.parseId(uri));
                 retCursor = db.query(DatabaseContract.TABLE_TASKS,
                         projection,
                         DatabaseContract.TaskColumns._ID+" = ?",
@@ -123,11 +123,11 @@ public class TaskProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        int rows = -1;
+        int rows;
 
         switch (sUriMatcher.match(uri)){
             case TASKS_WITH_ID:
-                rows = db.update(DatabaseContract.TABLE_TASKS, values, DatabaseContract.TaskColumns._ID+" = ?", new String[]{uri.getPathSegments().get(1)});
+                rows = db.update(DatabaseContract.TABLE_TASKS, values, DatabaseContract.TaskColumns._ID+" = ?", new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

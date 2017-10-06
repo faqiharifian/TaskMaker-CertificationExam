@@ -3,12 +3,14 @@ package com.google.developer.taskmaker;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +26,12 @@ import com.google.developer.taskmaker.data.TaskUpdateService;
 
 public class MainActivity extends AppCompatActivity implements
         TaskAdapter.OnItemClickListener,
-        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int LOADER_ID_MESSAGES = 0;
 
     private TaskAdapter mAdapter;
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(new Intent(MainActivity.this, AddTaskActivity.class));
             }
         });
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
     }
@@ -103,7 +110,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, DatabaseContract.CONTENT_URI, null, null, null, null);
+        String sort = DatabaseContract.DEFAULT_SORT;
+        String sortPref = sharedPreferences.getString(getString(R.string.pref_sortBy_key), getString(R.string.pref_sortBy_default));
+        if(sortPref.equals(getString(R.string.pref_sortBy_due))){
+            sort = DatabaseContract.DATE_SORT;
+        }
+        Log.e("sort", sort);
+        return new CursorLoader(this, DatabaseContract.CONTENT_URI, null, null, null, sort);
     }
 
     @Override
@@ -115,5 +128,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        getSupportLoaderManager().restartLoader(LOADER_ID_MESSAGES, null, this);
     }
 }

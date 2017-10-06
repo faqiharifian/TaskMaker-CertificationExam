@@ -51,6 +51,7 @@ public class TaskTitleView extends TextView {
             case DONE:
                 setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                break;
             case NORMAL:
                 setPaintFlags(0);
                 setTextColor(ContextCompat.getColor(getContext(), R.color.black));
