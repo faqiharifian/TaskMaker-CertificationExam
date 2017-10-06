@@ -1,6 +1,7 @@
 package com.google.developer.taskmaker;
 
 import android.app.DatePickerDialog;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -10,11 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.developer.taskmaker.data.DatabaseContract;
+import com.google.developer.taskmaker.data.Task;
+import com.google.developer.taskmaker.data.TaskUpdateService;
 import com.google.developer.taskmaker.views.TaskTitleView;
 
 import java.util.Date;
@@ -26,6 +30,8 @@ public class TaskDetailActivity extends AppCompatActivity implements
     TaskTitleView nameView;
     TextView dateView;
     ImageView priorityView;
+
+    Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,19 @@ public class TaskDetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_delete:
+                if(task != null) {
+                    TaskUpdateService.deleteTask(this, ContentUris.withAppendedId(DatabaseContract.CONTENT_URI, task.id));
+                    finish();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         //TODO: Handle date selection from a DatePickerFragment
     }
@@ -59,6 +78,8 @@ public class TaskDetailActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data.moveToFirst()) {
+            task = new Task(data);
+
             int id = DatabaseContract.getColumnInt(data, DatabaseContract.TaskColumns._ID);
             String description = DatabaseContract.getColumnString(data, DatabaseContract.TaskColumns.DESCRIPTION);
             int complete = DatabaseContract.getColumnInt(data, DatabaseContract.TaskColumns.IS_COMPLETE);
