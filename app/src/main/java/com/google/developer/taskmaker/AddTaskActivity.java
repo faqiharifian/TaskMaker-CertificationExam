@@ -22,6 +22,7 @@ import java.util.Calendar;
 public class AddTaskActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener,
         View.OnClickListener {
+    private final String KEY_STATE_DATE = "date";
 
     //Selected due date, stored as a timestamp
     private long mDueDate = 0;
@@ -39,6 +40,11 @@ public class AddTaskActivity extends AppCompatActivity implements
         mPrioritySelect = (SwitchCompat) findViewById(R.id.switch_priority);
         mDueDateView = (TextView) findViewById(R.id.text_date);
         View mSelectDate = findViewById(R.id.select_date);
+
+        if(savedInstanceState != null){
+            mDueDate = savedInstanceState.getLong(KEY_STATE_DATE, 0);
+            mDueDateView.setText(DateUtils.getRelativeTimeSpanString(mDueDate));
+        }
 
         mSelectDate.setOnClickListener(this);
         updateDateDisplay();
@@ -96,7 +102,7 @@ public class AddTaskActivity extends AppCompatActivity implements
     }
 
     private void updateDateDisplay() {
-        if (getDateSelection() == Long.MAX_VALUE) {
+        if (getDateSelection() == 0) {
             mDueDateView.setText(R.string.date_empty);
         } else {
             CharSequence formatted = DateUtils.getRelativeTimeSpanString(this, mDueDate);
@@ -116,4 +122,9 @@ public class AddTaskActivity extends AppCompatActivity implements
         finish();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(KEY_STATE_DATE, mDueDate);
+    }
 }
