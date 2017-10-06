@@ -30,7 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_below="@id/text_wrapper_description"
-        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="?android:textColorSecondary"
         android:text="@string/task_priority"/>
 

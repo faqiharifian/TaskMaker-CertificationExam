@@ -24,7 +24,7 @@ public class AddTaskActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     //Selected due date, stored as a timestamp
-    private long mDueDate = Long.MAX_VALUE;
+    private long mDueDate = 0;
 
     private TextInputEditText mDescriptionView;
     private SwitchCompat mPrioritySelect;
