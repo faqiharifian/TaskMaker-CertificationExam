@@ -98,8 +98,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             long dueDate = DatabaseContract.getColumnLong(mCursor, DatabaseContract.TaskColumns.DUE_DATE);
 
             holder.nameView.setText(description);
-            Log.e("complete", String.valueOf(complete == 1));
-            Log.e("date", dueDate+" > "+(new Date()).getTime()+" = "+(dueDate > (new Date()).getTime()));
             if(complete == 1){
                 holder.nameView.setState(TaskTitleView.DONE);
             }else if(dueDate != 0 && dueDate < (new Date()).getTime()){

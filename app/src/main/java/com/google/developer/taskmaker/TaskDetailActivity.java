@@ -83,6 +83,7 @@ public class TaskDetailActivity extends AppCompatActivity implements
             }else {
                 priorityView.setImageResource(R.drawable.ic_not_priority);
             }
+            Log.e("cursor", id+" - "+description+" - "+complete+" - "+priority+" - "+dueDate);
         }
     }
 

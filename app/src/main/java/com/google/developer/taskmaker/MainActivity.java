@@ -1,6 +1,7 @@
 package com.google.developer.taskmaker;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,7 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.developer.taskmaker.data.DatabaseContract;
+import com.google.developer.taskmaker.data.Task;
 import com.google.developer.taskmaker.data.TaskAdapter;
+import com.google.developer.taskmaker.data.TaskUpdateService;
 
 public class MainActivity extends AppCompatActivity implements
         TaskAdapter.OnItemClickListener,
@@ -87,7 +90,15 @@ public class MainActivity extends AppCompatActivity implements
     /* Click events on RecyclerView item checkboxes */
     @Override
     public void onItemToggled(boolean active, int position) {
-        //TODO: Handle task item checkbox event
+        Task task = mAdapter.getItem(position);
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TaskColumns._ID, task.id);
+        values.put(DatabaseContract.TaskColumns.DESCRIPTION, task.description);
+        values.put(DatabaseContract.TaskColumns.IS_PRIORITY, task.isPriority);
+        values.put(DatabaseContract.TaskColumns.IS_COMPLETE, 1);
+        values.put(DatabaseContract.TaskColumns.DUE_DATE, task.dueDateMillis);
+
+        TaskUpdateService.updateTask(this, ContentUris.withAppendedId(DatabaseContract.CONTENT_URI, task.id), values);
     }
 
     @Override

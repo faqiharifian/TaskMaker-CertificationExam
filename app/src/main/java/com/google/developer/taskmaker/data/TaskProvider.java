@@ -121,9 +121,23 @@ public class TaskProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        //TODO: Implement existing task update
-        //TODO: Expected Uri: content://com.google.developer.taskmaker/tasks/{id}
-        return 0;
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        int rows = -1;
+
+        switch (sUriMatcher.match(uri)){
+            case TASKS_WITH_ID:
+                rows = db.update(DatabaseContract.TABLE_TASKS, values, DatabaseContract.TaskColumns._ID+" = ?", new String[]{uri.getPathSegments().get(1)});
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Notify the resolver if the uri has been changed, and return the newly inserted URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return constructed uri (this points to the newly inserted row of data)
+        return rows;
     }
 
     @Override
