@@ -24,11 +24,11 @@ public class DatabaseContract {
 
     /* Sort order constants */
     //Priority first, Completed last, the rest by date
-    public static final String DEFAULT_SORT = String.format("%s DESC, %s DESC, %s ASC",
+    public static final String DEFAULT_SORT = String.format("%s DESC, %s ASC, %s ASC",
             TaskColumns.IS_PRIORITY, TaskColumns.DUE_DATE, TaskColumns.IS_COMPLETE);
 
     //Completed last, then by date, followed by priority
-    public static final String DATE_SORT = String.format("%s DESC, %s DESC, %s ASC",
+    public static final String DATE_SORT = String.format("%s ASC, %s DESC, %s ASC",
             TaskColumns.DUE_DATE, TaskColumns.IS_PRIORITY, TaskColumns.IS_COMPLETE);
 
     //Base content Uri for accessing the provider
