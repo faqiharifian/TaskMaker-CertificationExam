@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
         values.put(DatabaseContract.TaskColumns._ID, task.id);
         values.put(DatabaseContract.TaskColumns.DESCRIPTION, task.description);
         values.put(DatabaseContract.TaskColumns.IS_PRIORITY, task.isPriority);
-        values.put(DatabaseContract.TaskColumns.IS_COMPLETE, 1);
+        values.put(DatabaseContract.TaskColumns.IS_COMPLETE, active ? 1 : 0);
         values.put(DatabaseContract.TaskColumns.DUE_DATE, task.dueDateMillis);
 
         TaskUpdateService.updateTask(this, ContentUris.withAppendedId(DatabaseContract.CONTENT_URI, task.id), values);

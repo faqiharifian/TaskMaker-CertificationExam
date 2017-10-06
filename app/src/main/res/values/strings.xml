@@ -17,8 +17,10 @@
     <string name="pref_sortBy_default_label">Default</string>
     <string name="pref_sortBy_due_label">Due Date</string>
     <string name="reminder_title">Task Reminder</string>
+    <string name="error_reminder_past">Reminder in the past is not allowed.</string>
 
     <string name="pref_sortBy_key" translatable="false">sort</string>
     <string name="pref_sortBy_default" translatable="false">default</string>
     <string name="pref_sortBy_due" translatable="false">due</string>
+    <string name="reminder_set">Reminder Set Successfully</string>
 </resources>

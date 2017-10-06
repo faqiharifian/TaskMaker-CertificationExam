@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.google.developer.taskmaker.MainActivity;
 import com.google.developer.taskmaker.R;
+import com.google.developer.taskmaker.TaskDetailActivity;
 import com.google.developer.taskmaker.data.DatabaseContract;
 import com.google.developer.taskmaker.data.DatabaseContract.TaskColumns;
 
@@ -38,7 +38,7 @@ public class ReminderAlarmService extends IntentService {
         Uri uri = intent.getData();
 
         //Display a notification to view the task details
-        Intent action = new Intent(this, MainActivity.class);
+        Intent action = new Intent(this, TaskDetailActivity.class);
         action.setData(uri);
         PendingIntent operation = TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(action)
