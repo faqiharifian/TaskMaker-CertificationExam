@@ -69,6 +69,16 @@ public class TaskProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            case TASKS_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                retCursor = db.query(DatabaseContract.TABLE_TASKS,
+                        projection,
+                        DatabaseContract.TaskColumns._ID+" = ?",
+                        new String[]{id},
+                        null,
+                        null,
+                        sortOrder);
+                break;
             // Default exception
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -79,10 +89,6 @@ public class TaskProvider extends ContentProvider {
 
         // Return the desired Cursor
         return retCursor;
-        //TODO: Implement task query
-        //TODO: Expected "query all" Uri: content://com.google.developer.taskmaker/tasks
-        //TODO: Expected "query one" Uri: content://com.google.developer.taskmaker/tasks/{id}
-//        return null;
     }
 
     @Nullable

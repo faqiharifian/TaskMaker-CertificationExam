@@ -1,5 +1,6 @@
 package com.google.developer.taskmaker;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements
     /* Click events in RecyclerView items */
     @Override
     public void onItemClick(View v, int position) {
-        //TODO: Handle list item click event
+        Intent i = new Intent(this, TaskDetailActivity.class);
+        i.setData(ContentUris.withAppendedId(DatabaseContract.CONTENT_URI, mAdapter.getItemId(position)));
+        startActivity(i);
     }
 
     /* Click events on RecyclerView item checkboxes */

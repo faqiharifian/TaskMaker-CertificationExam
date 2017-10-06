@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.developer.taskmaker.R;
 import com.google.developer.taskmaker.views.TaskTitleView;
 
+import java.util.Date;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
     /* Callback for list item click events */
@@ -88,13 +90,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     @Override
     public void onBindViewHolder(TaskHolder holder, int position) {
         if(mCursor.moveToPosition(position)){
-            int id = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns._ID));
-            String description = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.TaskColumns.DESCRIPTION));
-            int complete = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_COMPLETE));
-            int priority = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_PRIORITY));
-            long dueDate = mCursor.getLong(mCursor.getColumnIndex(DatabaseContract.TaskColumns.IS_COMPLETE));
+            int id = DatabaseContract.getColumnInt(mCursor, DatabaseContract.TaskColumns._ID);
+            String description = DatabaseContract.getColumnString(mCursor, DatabaseContract.TaskColumns.DESCRIPTION);
+            int complete = DatabaseContract.getColumnInt(mCursor, DatabaseContract.TaskColumns.IS_COMPLETE);
+            int priority = DatabaseContract.getColumnInt(mCursor, DatabaseContract.TaskColumns.IS_PRIORITY);
+            long dueDate = DatabaseContract.getColumnLong(mCursor, DatabaseContract.TaskColumns.IS_COMPLETE);
 
             holder.nameView.setText(description);
+            if(complete == 1){
+                holder.nameView.setState(TaskTitleView.DONE);
+            }else if(dueDate != 0 && dueDate > (new Date()).getTime()){
+                holder.nameView.setState(TaskTitleView.OVERDUE);
+            }else{
+                holder.nameView.setState(TaskTitleView.NORMAL);
+            }
             holder.checkBox.setChecked(complete == 1);
             int priorityDrawable;
             if(priority == 1){
